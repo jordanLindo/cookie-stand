@@ -1,0 +1,61 @@
+/*
+colors to choose from
+#ffff00,#b3b300,#ffffbf,#aa00ff,#7700b3
+*/
+
+@font-face {
+    font-family: Stick No Bills;
+    src: url('../CSS/Fonts/Stick_No_Bills/StickNoBills-VariableFont_wght.ttf');
+}
+
+body{
+    background-color: #ffffbf;
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-family: Stick No Bills;
+    color: #7700b3;
+    text-align: center;
+}
+
+h1{
+    font-size: 6em;
+    margin: 0 10%;
+}
+
+article{
+    width: 60%;
+    margin: 0 20%;
+    border: #b3b300 solid 2px;
+    background-color: #aa00ff;
+    
+}
+
+article > *{
+    color: #ffff00;
+}
+
+h2{
+    font-size: 5em;
+}
+
+ul{
+    font-family: Arial, Helvetica, sans-serif;
+    padding-bottom: 5%;
+    margin-left: 10%;
+}
+
+
+li > ul{
+    text-align: left;
+    margin-left: 10%;
+}
+
+p, a{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    text-align: center;
+}
+
+.innerList{
+    list-style: inside disc;
+}
