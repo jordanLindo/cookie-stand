@@ -17,71 +17,50 @@ var hasRun = false;
  */
 function initialize(){
     console.log('In initialize()');
-    if(!hasRun){
         locations = [];
 
-        let seattle = {
-            location: "Seattle",
-            minCust: 23,
-            maxCust: 65,
-            avgCookieSale: 6.3,
-            cookiesSoldByHour: []
-        };
-        seattle.cookiesSoldByHour = getSimCookiesByHour(seattle.maxCust,seattle.minCust,seattle.avgCookieSale);
+        let seattle = new Store("Seattle",23,65,6.3);
+        
         locations.push(seattle);
 
-        let tokyo = {
-            location: "Tokyo",
-            minCust: 3,
-            maxCust: 24,
-            avgCookieSale: 1.2,
-            cookiesSoldByHour: []
+        let tokyo = new Store("Tokyo",3,24,1.2);
         
-        };
-        tokyo.cookiesSoldByHour = getSimCookiesByHour(tokyo.maxCust,tokyo.minCust,tokyo.avgCookieSale);
         locations.push(tokyo);
 
-        let dubai = {
-            location: "Dubai",
-            minCust: 11,
-            maxCust: 38,
-            avgCookieSale: 3.7,
-            cookiesSoldByHour: []
-        };
-        dubai.cookiesSoldByHour = getSimCookiesByHour(dubai.maxCust,dubai.minCust,dubai.avgCookieSale);
+        let dubai = new Store("Dubai",11,38,3.7);
+        
         locations.push(dubai);
 
-
-        let paris = {
-            location: "Paris",
-            minCust: 20,
-            maxCust: 38,
-            avgCookieSale: 2.3,
-            cookiesSoldByHour: []
+        let paris = new Store("Paris",20,38,2.3);
         
-        };
-        paris.cookiesSoldByHour = getSimCookiesByHour(paris.maxCust,paris.minCust,paris.avgCookieSale);
         locations.push(paris);
 
-
-
-        let lima = {
-            location: "Lima",
-            minCust: 2,
-            maxCust: 16,
-            avgCookieSale: 4.6,
-            cookiesSoldByHour: []
-        };
-        lima.cookiesSoldByHour = getSimCookiesByHour(paris.maxCust,paris.minCust,paris.avgCookieSale);
+        let lima = new Store("Lima",2,16,4.6);
+        
         locations.push(lima);
-
-        hasRun = true;
-    }
 
     updateLocationListDisplay();
     updateLocationsSection();
     
     
+}
+
+
+function Store(storeLocation,minCust,maxCust,avgCookieSale){
+    this.storeLocation = storeLocation;
+    this.minCust = minCust;
+    this.maxCust = maxCust;
+    this.avgCookieSale = avgCookieSale;
+}
+
+Store.prototype.getCookiesSoldByHour = function(){
+    let result = [];
+    for (let i = 0; i < hoursOfOp.length; i++) {
+        let randomCust = random(this.maxCust,this.minCust)
+        let line = [hoursOfOp[i],Math.floor(randomCust*this.avgCookieSale)];
+        result.push(line);
+    }
+    return result;
 }
 
 /**
@@ -146,13 +125,13 @@ function buildLocationListDisplay(){
     let ul = document.createElement("ul");
     for (let i = 0; i < locations.length; i++) {
         let li = document.createElement("li");
-        li.innerText = locations[i]["location"];
+        li.innerText = locations[i].storeLocation;
         ul.appendChild(li);
         let innerUl = document.createElement("ul");
         innerUl.classList.add("innerList");
         let total = 0;
         for (let j = 0; j < hoursOfOp.length; j++) {
-            const element = locations[i]["cookiesSoldByHour"];
+            const element = locations[i].getCookiesSoldByHour();
             let innerLi = document.createElement("li");
             innerLi.innerText = element[j][0]+": "+element[j][1]+" cookies";
             innerUl.appendChild(innerLi);
@@ -176,7 +155,7 @@ function buildLocationsSectionList(){
     let ul = document.createElement("ul");
     for (let i = 0; i < locations.length; i++) {
         let li = document.createElement("li");
-        li.innerText = locations[i]["location"];
+        li.innerText = locations[i].storeLocation;
         ul.appendChild(li);
     }
     return ul
