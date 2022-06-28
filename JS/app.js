@@ -150,12 +150,17 @@ function buildLocationListDisplay(){
         ul.appendChild(li);
         let innerUl = document.createElement("ul");
         innerUl.classList.add("innerList");
+        let total = 0;
         for (let j = 0; j < hoursOfOp.length; j++) {
             const element = locations[i]["cookiesSoldByHour"];
             let innerLi = document.createElement("li");
             innerLi.innerText = element[j][0]+": "+element[j][1]+" cookies";
             innerUl.appendChild(innerLi);
+            total += element[j][1];
         }
+        let totalLi = document.createElement("li");
+        totalLi.innerText = "Total: "+ total;
+        innerUl.appendChild(totalLi);
         li.appendChild(innerUl);
     }
     article.appendChild(ul);
