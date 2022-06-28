@@ -24,11 +24,10 @@ h1{
 }
 
 article{
-    width: 60%;
-    margin: 0 20%;
     border: #b3b300 solid 2px;
     background-color: #aa00ff;
     min-width: 300px;
+    width: auto;
     
 }
 
@@ -73,6 +72,14 @@ a{
     list-style: inside disc;
 }
 
+div{
+    margin-bottom: 5em;
+    background-color: #b3b300;
+    height: 800px;
+    width: 90%;
+    margin: 0 5%;
+}
+
 footer{
     position: fixed;
     left: 0;
@@ -82,4 +89,37 @@ footer{
     color: #ffffbf;
     text-align: center;
     height: 4em;
+}
+
+footer li{
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+table{
+    border: #b3b300 solid 3px;
+    color: #ffff00;
+    margin: 3%;
+    text-align: center;
+    align-self: center;
+    background-color: #aa00ff;
+}
+
+th{
+    font-weight: bolder;
+    font-size: 2em;
+    border: #b3b300 solid 1px;;
+    border-collapse: collapse;
+    text-align: center;
+    word-wrap: normal;
+
+}
+
+td{
+    margin: 0;
+    border: #b3b300 solid 1px;
+    border-collapse: collapse;
+    font-size: 1em;
+    font-weight: bold;
 }
