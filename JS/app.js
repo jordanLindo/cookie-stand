@@ -130,33 +130,7 @@ function updateLocationsSection(){
  * Assembles an article based on simulates sales information.
  */
 function buildLocationListDisplay(){
-<<<<<<< HEAD
-    let article = document.createElement("article");
-    let h2 = document.createElement("h2");
-    h2.innerText = "Locations";
-    article.appendChild(h2);
-    let ul = document.createElement("ul");
-    for (let i = 0; i < locations.length; i++) {
-        let li = document.createElement("li");
-        li.innerText = locations[i]["location"];
-        ul.appendChild(li);
-        let innerUl = document.createElement("ul");
-        innerUl.classList.add("innerList");
-        let total = 0;
-        for (let j = 0; j < hoursOfOp.length; j++) {
-            const element = locations[i]["cookiesSoldByHour"];
-            let innerLi = document.createElement("li");
-            innerLi.innerText = element[j][0]+": "+element[j][1]+" cookies";
-            innerUl.appendChild(innerLi);
-            total += element[j][1];
-        }
-        let totalLi = document.createElement("li");
-        totalLi.innerText = "Total: "+ total;
-        innerUl.appendChild(totalLi);
-        li.appendChild(innerUl);
-    }
-    article.appendChild(ul);
-=======
+
     let div = document.getElementById('locationList');
     let h2 = document.createElement('h2');
     h2.innerText = 'Locations';
@@ -164,7 +138,6 @@ function buildLocationListDisplay(){
     let table = document.createElement('table');
     table.setAttribute('id','salesTable');
     let headerTr = getHeaderRow();
->>>>>>> class07-Constructors
 
     let totalTh = document.createElement('th');
     totalTh.innerText = "Daily Location Total";
