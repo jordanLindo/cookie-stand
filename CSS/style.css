@@ -28,6 +28,7 @@ article{
     margin: 0 20%;
     border: #b3b300 solid 2px;
     background-color: #aa00ff;
+    min-width: 300px;
     
 }
 
@@ -45,17 +46,40 @@ ul{
     margin-left: 10%;
 }
 
+li{
+    font-weight: bold;
+}
 
 li > ul{
     text-align: left;
     margin-left: 10%;
 }
 
-p, a{
+li > ul > li{
+    padding: 1%;
+}
+
+p{
     font-family: Georgia, 'Times New Roman', Times, serif;
     text-align: center;
 }
 
+a{
+    font-weight: bold;
+    color: #ffff00;
+}
+
 .innerList{
     list-style: inside disc;
+}
+
+footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #7700b3;
+    color: #ffffbf;
+    text-align: center;
+    height: 4em;
 }
