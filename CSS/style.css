@@ -74,6 +74,10 @@ a{
 
 div{
     margin-bottom: 5em;
+    background-color: #b3b300;
+    height: 800px;
+    width: 90%;
+    margin: 0 5%;
 }
 
 footer{
@@ -95,9 +99,10 @@ footer li{
 
 table{
     border: #b3b300 solid 3px;
+    color: #ffff00;
     margin: 3%;
     text-align: center;
-    max-width: 800px;
+    align-self: center;
     background-color: #aa00ff;
 }
 

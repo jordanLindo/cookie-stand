@@ -8,8 +8,9 @@ FILE app.js
 // Global variables
 var locations;
 var hoursOfOp = ['6:00am','7:00am','8:00am','9:00am','10:00am','11:00am','12:00pm'
-,'1:00pm','2:00pm','3:00pm','4:00pm','5:00pm','6:00pm','7:00pm'];
-var hourlyTotals = [0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+,'1:00pm','2:00pm','3:00pm','4:00pm','5:00pm','6:00pm','7:00pm','8:00pm'];
+var hourlyTotals = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+var curve = [0.5, 0.75, 1.0, 0.6, 0.8, 1.0, 0.7, 0.4, 0.6, 0.9, 0.7, 0.5, 0.3, 0.4, 0.6]
 var dailyTotals;
 var hasRun = false;
 
@@ -45,7 +46,7 @@ function initialize(){
 
     updateLocationsSection();
 
-    //buildSecondTable();
+    buildSecondTable();
     
     
 }
@@ -56,12 +57,14 @@ function Store(storeLocation,minCust,maxCust,avgCookieSale){
     this.minCust = minCust;
     this.maxCust = maxCust;
     this.avgCookieSale = avgCookieSale;
+    this.cookiesByHour = this.getCookiesSoldByHour();
 }
 
 Store.prototype.getCookiesSoldByHour = function(){
     let result = [];
     for (let i = 0; i < hoursOfOp.length; i++) {
         let randomCust = random(this.maxCust,this.minCust)
+        randomCust = Math.ceil(randomCust*curve[i]);
         let line = [hoursOfOp[i],Math.floor(randomCust*this.avgCookieSale)];
         result.push(line);
     }
@@ -76,7 +79,7 @@ Store.prototype.render = function(parent){
     tr.appendChild(th);
     let total = 0;
     for (let j = 0; j < hoursOfOp.length; j++) {
-        const element = this.getCookiesSoldByHour();
+        const element = this.cookiesByHour;
         let td = document.createElement('td');
         td.innerText = element[j][1]+' cookies';
         tr.appendChild(td);
@@ -89,22 +92,6 @@ Store.prototype.render = function(parent){
     parentElement.appendChild(tr);
 }
 
-/**
- * 
- * @param {number} maxCust maximum hourly customers
- * @param {number} minCust minimum hourly customers
- * @param {number} avgCookieSale average cookies sold per customer
- * @returns {Array} cookie sales by hour
- */
-function getSimCookiesByHour(maxCust,minCust,avgCookieSale){
-    let result = [];
-    for (let i = 0; i < hoursOfOp.length; i++) {
-        let randomCust = random(maxCust,minCust)
-        let line = [hoursOfOp[i],Math.floor(randomCust*avgCookieSale)];
-        result.push(line);
-    }
-    return result;
-}
 
 /**
  * 
@@ -113,7 +100,7 @@ function getSimCookiesByHour(maxCust,minCust,avgCookieSale){
  * @returns {number} a random number between min and max inclusive
  */
 function random(max,min){
-    return Math.ceil(Math.random()*(max-min)+min);
+    return Math.floor(Math.random()*(max-min+1)+min);
 }
 
 /**
@@ -123,8 +110,7 @@ function updateLocationListDisplay(){
     let div = document.getElementById('locationList');
     if(div != null){
         div.innerHTML = '';
-        let article = buildLocationListDisplay();
-        div.appendChild(article);
+        buildLocationListDisplay();
     }
 }
 
@@ -142,14 +128,12 @@ function updateLocationsSection(){
 
 /**
  * Assembles an article based on simulates sales information.
- * @returns {article} an article assembled based on simulated sales information
  */
 function buildLocationListDisplay(){
-    let article = document.createElement('article');
+    let div = document.getElementById('locationList');
     let h2 = document.createElement('h2');
     h2.innerText = 'Locations';
-    article.appendChild(h2);
-    let div = document.getElementById('locationList');
+    div.appendChild(h2);
     let table = document.createElement('table');
     table.setAttribute('id','salesTable');
     let headerTr = getHeaderRow();
@@ -162,38 +146,15 @@ function buildLocationListDisplay(){
     locations.forEach(store => {
         store.render(table);
     });
-
-    for (let i = 0; i < locations.length; i++) {
-        let tr = document.createElement('tr');
-        let th = document.createElement('th');
-        th.innerText = locations[i].storeLocation;
-        tr.appendChild(th);
-        let total = 0;
-        for (let j = 0; j < hoursOfOp.length; j++) {
-            const element = locations[i].getCookiesSoldByHour();
-            let td = document.createElement('td');
-            td.innerText = element[j][1]+' cookies';
-            tr.appendChild(td);
-            total += element[j][1];
-            hourlyTotals[j] += element[j][1];
-        }
-        let totalTd = document.createElement('td');
-        totalTd.innerText = total;
-        tr.appendChild(totalTd);
-        table.appendChild(tr);
-    }
     let tFooter = getTableFooter(hourlyTotals);
     
     table.appendChild(tFooter);
-    article.appendChild(table);
-
-    return article;
+    div.appendChild(table);
 }
 
 
 function buildSecondTable(){
     let parent = document.getElementById("locationList");
-    let originTable = document.getElementById("salesTable");
     let table = document.createElement('table');
     table.appendChild(getHeaderRow());
     locations.forEach(store => {
@@ -202,14 +163,22 @@ function buildSecondTable(){
         th.innerText = store.storeLocation;
         tr.appendChild(th);
         for (let i = 0; i < hoursOfOp.length; i++) {
-            const element = store.getCookiesSoldByHour[i];
+            const element = store.cookiesByHour[i][1];
             let td = document.createElement('td');
-            td.innerText = Math.floor(element/20);
+            td.innerText = getEmployeesNeeded(element)+" tossers";
             tr.appendChild(td);
         }
         table.appendChild(tr);
     });
     parent.appendChild(table);
+}
+
+function getEmployeesNeeded(element){
+    let result = Math.ceil(element/20);
+    if (result < 2){
+        result = 2;
+    }
+    return result;
 }
 
 function getHeaderRow(){
