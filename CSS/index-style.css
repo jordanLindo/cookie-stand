@@ -18,10 +18,15 @@ p{
 }
 
 img{
-    width: 80%;
-    padding-left: 10%;
-    padding-top: 5%;
+    height: 75px;
 }
+
+.container{
+     flex-direction: row;
+     margin-left: 20%;
+     
+}
+
 
 a{
     align-content: center;
