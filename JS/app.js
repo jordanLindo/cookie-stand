@@ -22,23 +22,23 @@ function initialize(){
     console.log('In initialize()');
         locations = [];
 
-        let seattle = new Store('Seattle',23,65,6.3);
+        let seattle = new Store('Seattle',23,65,6.3,"1234 Fake Street","123-456-7890");
         
         locations.push(seattle);
 
-        let tokyo = new Store('Tokyo',3,24,1.2);
+        let tokyo = new Store('Tokyo',3,24,1.2,"1235 Fake Street","223-456-7890");
         
         locations.push(tokyo);
 
-        let dubai = new Store('Dubai',11,38,3.7);
+        let dubai = new Store('Dubai',11,38,3.7,"1236 Fake Street","323-456-7890");
         
         locations.push(dubai);
 
-        let paris = new Store('Paris',20,38,2.3);
+        let paris = new Store('Paris',20,38,2.3,"34 Fake Road","423-456-7890");
         
         locations.push(paris);
 
-        let lima = new Store('Lima',2,16,4.6);
+        let lima = new Store('Lima',2,16,4.6,"23 Fictitious Street","523-456-7890");
         
         locations.push(lima);
 
@@ -52,20 +52,22 @@ function initialize(){
 }
 
 
-function Store(storeLocation,minCust,maxCust,avgCookieSale){
+function Store(storeLocation,minCustomer,maxCustomer,avgCookieSale,address,phoneNumber){
     this.storeLocation = storeLocation;
-    this.minCust = minCust;
-    this.maxCust = maxCust;
+    this.minCustomer = minCustomer;
+    this.maxCustomer = maxCustomer;
     this.avgCookieSale = avgCookieSale;
+    this.address = address;
+    this.phoneNumber = phoneNumber;
     this.cookiesByHour = this.getCookiesSoldByHour();
 }
 
 Store.prototype.getCookiesSoldByHour = function(){
     let result = [];
     for (let i = 0; i < hoursOfOp.length; i++) {
-        let randomCust = random(this.maxCust,this.minCust)
-        randomCust = Math.ceil(randomCust*curve[i]);
-        let line = [hoursOfOp[i],Math.floor(randomCust*this.avgCookieSale)];
+        let randomCustomer = random(this.maxCustomer,this.minCustomer)
+        randomCustomer = Math.ceil(randomCustomer*curve[i]);
+        let line = [hoursOfOp[i],Math.floor(randomCustomer*this.avgCookieSale)];
         result.push(line);
     }
     return result;
@@ -219,7 +221,9 @@ function buildLocationsSectionList(){
     let ul = document.createElement('ul');
     for (let i = 0; i < locations.length; i++) {
         let li = document.createElement('li');
-        li.innerText = locations[i].storeLocation;
+        li.innerText = locations[i].storeLocation +" "+
+         locations[i].address + " "+hoursOfOp[0]+" to "+
+          hoursOfOp[14]+" "+locations[i].phoneNumber;
         ul.appendChild(li);
     }
     return ul
