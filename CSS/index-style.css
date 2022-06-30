@@ -19,12 +19,23 @@ p{
 
 img{
     height: 75px;
+    margin: 3%;
+}
+
+.flex-container{
+    display: flex;
+    flex-direction: row;
+    background-color: var(--light-purple);
+    align-items: center;
+    justify-content: center;
 }
 
 .container{
-     flex-direction: row;
-     margin-left: 20%;
-     
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    
 }
 
 
@@ -32,4 +43,7 @@ a{
     align-content: center;
 }
 
+article{
+    border: none;
+}
 
