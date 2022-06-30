@@ -4,7 +4,9 @@ ul{
 }
 
 li{
-    padding: 2%;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 5px;
 }
 
 h1{
@@ -16,13 +18,32 @@ p{
 }
 
 img{
-    width: 80%;
-    padding-left: 10%;
-    padding-top: 5%;
+    height: 75px;
+    margin: 3%;
 }
+
+.flex-container{
+    display: flex;
+    flex-direction: row;
+    background-color: var(--light-purple);
+    align-items: center;
+    justify-content: center;
+}
+
+.container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    
+}
+
 
 a{
     align-content: center;
 }
 
+article{
+    border: none;
+}
 

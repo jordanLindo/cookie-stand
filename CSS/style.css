@@ -2,6 +2,16 @@
 colors to choose from
 #ffff00,#b3b300,#ffffbf,#aa00ff,#7700b3
 */
+:root,
+:root.light {
+    --bg-color: #ffffbf;
+    --dark-border: #b3b300;
+    --lg-text: #7700b3;
+    --light-purple: #aa00ff;
+    --bright-yellow: #ffff00;
+}
+
+
 
 @font-face {
     font-family: Stick No Bills;
@@ -9,12 +19,12 @@ colors to choose from
 }
 
 body{
-    background-color: #ffffbf;
+    background-color: var(--bg-color);
 }
 
 h1, h2, h3, h4, h5, h6{
     font-family: Stick No Bills;
-    color: #7700b3;
+    color: var(--lg-text);
     text-align: center;
 }
 
@@ -24,15 +34,16 @@ h1{
 }
 
 article{
-    border: #b3b300 solid 2px;
-    background-color: #aa00ff;
+    border: solid 2px;
+    border-color: var(--dark-border);
+    background-color: var(--light-purple);
     min-width: 300px;
     width: auto;
     
 }
 
 article > *{
-    color: #ffff00;
+    color: var(--bright-yellow);
 }
 
 h2{
@@ -65,7 +76,7 @@ p{
 
 a{
     font-weight: bold;
-    color: #ffff00;
+    color: var(--bright-yellow);
 }
 
 .innerList{
@@ -74,10 +85,8 @@ a{
 
 div{
     margin-bottom: 5em;
-    background-color: #b3b300;
+    background-color: var(--dark-border);
     height: 800px;
-    width: 90%;
-    margin: 0 5%;
 }
 
 footer{
@@ -85,8 +94,8 @@ footer{
     left: 0;
     bottom: 0;
     width: 100%;
-    background-color: #7700b3;
-    color: #ffffbf;
+    background-color: var(--lg-text);
+    color: var(--bg-color);
     text-align: center;
     height: 4em;
 }
@@ -98,18 +107,20 @@ footer li{
 }
 
 table{
-    border: #b3b300 solid 3px;
-    color: #ffff00;
-    margin: 3%;
+    border: solid 3px;
+    border-color: var(--dark-border);
+    color: var(--bright-yellow);
     text-align: center;
     align-self: center;
-    background-color: #aa00ff;
+    background-color: var(--light-purple);
+    margin-bottom: 5%;
 }
 
 th{
     font-weight: bolder;
     font-size: 2em;
-    border: #b3b300 solid 1px;;
+    border: solid 1px;
+    border-color: var(--dark-border);
     border-collapse: collapse;
     text-align: center;
     word-wrap: normal;
@@ -118,7 +129,8 @@ th{
 
 td{
     margin: 0;
-    border: #b3b300 solid 1px;
+    border: solid 1px;
+    border-color: var(--dark-border);
     border-collapse: collapse;
     font-size: 1em;
     font-weight: bold;
