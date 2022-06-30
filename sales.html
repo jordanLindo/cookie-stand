@@ -1,27 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
     <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Stick+No+Bills:wght@600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="CSS/reset.css"/>
-    <link rel="stylesheet" href="CSS/style.css"/>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link rel='preconnect' href='https://fonts.googleapis.com'>
+    <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+    <link href='https://fonts.googleapis.com/css2?family=League+Gothic&family=Stick+No+Bills:wght@600&display=swap' rel='stylesheet'>
+    <link rel='stylesheet' href='CSS/reset.css'/>
+    <link rel='stylesheet' href='CSS/style.css'/>
 
     <title>Salmon Cookie Stand</title>
     </head>
     <body>
-        <div id="locationList">
+        <div id='locationList'>
         </div>
+        <section>
+            <!--
+ * @param {string} storeLocation - city the store is located in
+ * @param {number} minCustomer - the minimum number of customers
+ * @param {number} maxCustomer - the maximum number of customers
+ * @param {number} avgCookieSale - the average number of cookies sold
+ * @param {string} address - the street address of the store
+ * @param {string} phoneNumber - the phone number of the store
+            -->
+            <form>
+                <fieldset>
+                    <label for="storeLocation">Store Location*</label><br/>
+                    <span id="storeLocationError" class="errorSpan"></span>
+                    <input type="text" id="storeLocation" name="storeLocation" required /><br/>
+                    <label for="minCustomer">Minimum Customers*</label><br/>
+                    <span id="minCustomerError" class="errorSpan"></span>
+                    <input type="number" id="minCustomer" name="minCustomer" value="0" required/><br/>
+                    <label for="maxCustomer">Maximum Customers*</label><br/>
+                    <span id="maxCustomerError" class="errorSpan"></span>
+                    <input type="number" id="maxCustomer" name="maxCustomer" value="0" required/><br/>
+                    <label for="avgCookieSale">Average Cookies per Customer*</label><br/>
+                    <span id="avgCookieSaleError" class="errorSpan"></span>
+                    <input type="number" id="avgCookieSale" name="avgCookieSale" value="0" required/><br/>
+                    <label for="address">Street Address</label><br/>
+                    <input type="text" id="address" name="address"/><br/>
+                    <label for="phoneNumber">Store Phone Number</label><br/>
+                    <span id="phoneNumberError" class="errorSpan"></span>
+                    <input type="text" id="phoneNumber" name="phoneNumber"/><br/>
+                    <input type="button" id="btnFormSubmit" onclick="formButtonPress()" value="Submit"></input>
+                </fieldset>
+            </form>
+        </section>
         <footer>
             Salmon Cookies
             <ul>
-                <li><a href="./index.html">Home</a></li>
-                <li><a href="./sales.html">All Locations</a></li>
+                <li><a href='./index.html'>Home</a></li>
+                <li><a href='./sales.html'>All Locations</a></li>
             </ul>
         </footer>
     </body>
-    <script src="JS/app.js"></script>
+    <script src='JS/app.js'></script>
 </html>
