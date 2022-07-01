@@ -13,6 +13,12 @@
     <title>Salmon Cookie Stand</title>
     </head>
     <body>
+        <nav>
+            <ul>
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="./sales.html">All Locations</a></li>
+            </ul>
+        </nav>
         <div id='locationList'>
         </div>
         <section>
@@ -26,6 +32,7 @@
             -->
             <form>
                 <fieldset>
+                    <h3>Add / Update Stores</h3>
                     <label for="storeLocation">Store Location*</label><br/>
                     <span id="storeLocationError" class="errorSpan"></span>
                     <input type="text" id="storeLocation" name="storeLocation" required /><br/>
@@ -49,10 +56,6 @@
         </section>
         <footer>
             Salmon Cookies
-            <ul>
-                <li><a href='./index.html'>Home</a></li>
-                <li><a href='./sales.html'>All Locations</a></li>
-            </ul>
         </footer>
     </body>
     <script src='JS/app.js'></script>
