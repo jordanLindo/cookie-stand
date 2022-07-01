@@ -85,6 +85,7 @@ a{
 
 div{
     margin-bottom: 5em;
+    width: auto;
     background-color: var(--dark-border);
     height: 800px;
 }
@@ -127,6 +128,7 @@ th{
 
 }
 
+
 td{
     margin: 0;
     border: solid 1px;
@@ -134,4 +136,22 @@ td{
     border-collapse: collapse;
     font-size: 1em;
     font-weight: bold;
+}
+
+form{
+    height: 500px;
+    margin-left: 40px;
+}
+
+form input{
+    margin-bottom: 15px;
+}
+
+button{
+    width: 100px;
+    height: 1.5em;
+}
+
+.errorSpan{
+    color: red;
 }

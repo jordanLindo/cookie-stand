@@ -6,13 +6,37 @@ FILE app.js
 "use strict"
 
 // Global variables
-var locations;
-var hoursOfOp = ['6:00am','7:00am','8:00am','9:00am','10:00am','11:00am','12:00pm'
-,'1:00pm','2:00pm','3:00pm','4:00pm','5:00pm','6:00pm','7:00pm','8:00pm'];
-var hourlyTotals = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-var curve = [0.5, 0.75, 1.0, 0.6, 0.8, 1.0, 0.7, 0.4, 0.6, 0.9, 0.7, 0.5, 0.3, 0.4, 0.6]
-var dailyTotals;
-var hasRun = false;
+var storeCollection;
+var phoneNumberRE = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+
+
+function StoreCollection(){
+    this.locations = [];
+    this.hoursOfOp = ['6:00am','7:00am','8:00am','9:00am','10:00am','11:00am','12:00pm'
+    ,'1:00pm','2:00pm','3:00pm','4:00pm','5:00pm','6:00pm','7:00pm','8:00pm'];
+    this.hourlyTotals = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    this.curve = [0.5, 0.75, 1.0, 0.6, 0.8, 1.0, 0.7, 0.4, 0.6, 0.9, 0.7, 0.5, 0.3, 0.4, 0.6];
+}
+
+StoreCollection.prototype.UpdateLocationMember = function(storeLocation,minCustomer,maxCustomer,avgCookieSale,address,phoneNumber){
+    let storeToUpdate = this.locations.find(Store =>{
+        return Store.storeLocation == storeLocation;
+    })
+    storeToUpdate.minCustomer = minCustomer;
+    storeToUpdate.maxCustomer = maxCustomer;
+    storeToUpdate.avgCookieSale = avgCookieSale;
+    if(address != ""){
+        storeToUpdate.address = address;
+    }
+    if(phoneNumber != ""){
+        storeToUpdate.phoneNumber = phoneNumber;
+    }
+    storeToUpdate.cookiesByHour = storeToUpdate.getCookiesSoldByHour();
+}
+
+StoreCollection.prototype.AddMember = function(storeLocation,minCustomer,maxCustomer,avgCookieSale,address,phoneNumber){
+    this.locations.push(new Store(storeLocation,minCustomer,maxCustomer,avgCookieSale,address,phoneNumber));
+}
 
 
 /**
@@ -20,38 +44,33 @@ var hasRun = false;
  */
 function initialize(){
     console.log('In initialize()');
-        locations = [];
+        storeCollection = new StoreCollection()
 
-        let seattle = new Store('Seattle',23,65,6.3,"1234 Fake Street","123-456-7890");
+        storeCollection.AddMember('Seattle',23,65,6.3,"1234 Fake Street","123-456-7890");
         
-        locations.push(seattle);
-
-        let tokyo = new Store('Tokyo',3,24,1.2,"1235 Fake Street","223-456-7890");
+        storeCollection.AddMember('Tokyo',3,24,1.2,"1235 Fake Street","223-456-7890");
         
-        locations.push(tokyo);
-
-        let dubai = new Store('Dubai',11,38,3.7,"1236 Fake Street","323-456-7890");
+        storeCollection.AddMember('Dubai',11,38,3.7,"1236 Fake Street","323-456-7890");
         
-        locations.push(dubai);
-
-        let paris = new Store('Paris',20,38,2.3,"34 Fake Road","423-456-7890");
+        storeCollection.AddMember('Paris',20,38,2.3,"34 Fake Road","423-456-7890");
         
-        locations.push(paris);
-
-        let lima = new Store('Lima',2,16,4.6,"23 Fictitious Street","523-456-7890");
-        
-        locations.push(lima);
+        storeCollection.AddMember('Lima',2,16,4.6,"23 Fictitious Street","523-456-7890");
 
     updateLocationListDisplay();
 
     updateLocationsSection();
-
-    buildSecondTable();
-    
-    
 }
 
 
+/**
+ * 
+ * @param {string} storeLocation - city the store is located in
+ * @param {number} minCustomer - the minimum number of customers
+ * @param {number} maxCustomer - the maximum number of customers
+ * @param {number} avgCookieSale - the average number of cookies sold
+ * @param {string} address - the street address of the store
+ * @param {string} phoneNumber - the phone number of the store
+ */
 function Store(storeLocation,minCustomer,maxCustomer,avgCookieSale,address,phoneNumber){
     this.storeLocation = storeLocation;
     this.minCustomer = minCustomer;
@@ -64,10 +83,10 @@ function Store(storeLocation,minCustomer,maxCustomer,avgCookieSale,address,phone
 
 Store.prototype.getCookiesSoldByHour = function(){
     let result = [];
-    for (let i = 0; i < hoursOfOp.length; i++) {
+    for (let i = 0; i < storeCollection.hoursOfOp.length; i++) {
         let randomCustomer = random(this.maxCustomer,this.minCustomer)
-        randomCustomer = Math.ceil(randomCustomer*curve[i]);
-        let line = [hoursOfOp[i],Math.floor(randomCustomer*this.avgCookieSale)];
+        randomCustomer = Math.ceil(randomCustomer*storeCollection.curve[i]);
+        let line = [storeCollection.hoursOfOp[i],Math.floor(randomCustomer*this.avgCookieSale)];
         result.push(line);
     }
     return result;
@@ -80,13 +99,13 @@ Store.prototype.render = function(parent){
     th.innerText = this.storeLocation;
     tr.appendChild(th);
     let total = 0;
-    for (let j = 0; j < hoursOfOp.length; j++) {
+    for (let j = 0; j < storeCollection.hoursOfOp.length; j++) {
         const element = this.cookiesByHour;
         let td = document.createElement('td');
         td.innerText = element[j][1]+' cookies';
         tr.appendChild(td);
         total += element[j][1];
-        hourlyTotals[j] += element[j][1];
+        storeCollection.hourlyTotals[j] += element[j][1];
     }
     let totalTd = document.createElement('td');
     totalTd.innerText = total;
@@ -110,10 +129,13 @@ function random(max,min){
  */
 function updateLocationListDisplay(){
     let div = document.getElementById('locationList');
+    storeCollection.hourlyTotals = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
     if(div != null){
         div.innerHTML = '';
         buildLocationListDisplay();
+        buildSecondTable();
     }
+    console.log(storeCollection.locations);
 }
 
 
@@ -146,10 +168,10 @@ function buildLocationListDisplay(){
     headerTr.appendChild(totalTh);
 
     table.appendChild(headerTr);
-    locations.forEach(store => {
+    storeCollection.locations.forEach(store => {
         store.render(table);
     });
-    let tFooter = getTableFooter(hourlyTotals);
+    let tFooter = getTableFooter(storeCollection.hourlyTotals);
     
     table.appendChild(tFooter);
     div.appendChild(table);
@@ -160,12 +182,12 @@ function buildSecondTable(){
     let parent = document.getElementById("locationList");
     let table = document.createElement('table');
     table.appendChild(getHeaderRow());
-    locations.forEach(store => {
+    storeCollection.locations.forEach(store => {
         let tr = document.createElement('tr');
         let th = document.createElement('th');
         th.innerText = store.storeLocation;
         tr.appendChild(th);
-        for (let i = 0; i < hoursOfOp.length; i++) {
+        for (let i = 0; i < storeCollection.hoursOfOp.length; i++) {
             const element = store.cookiesByHour[i][1];
             let td = document.createElement('td');
             td.innerText = getEmployeesNeeded(element)+" tossers";
@@ -188,9 +210,9 @@ function getHeaderRow(){
     let timeTr = document.createElement('thead');
     let emptyTd = document.createElement('td');
     timeTr.appendChild(emptyTd);
-    for (let j = 0; j < hoursOfOp.length; j++) {
+    for (let j = 0; j < storeCollection.hoursOfOp.length; j++) {
         let timeTh = document.createElement('th');
-        timeTh.innerText = hoursOfOp[j];
+        timeTh.innerText = storeCollection.hoursOfOp[j];
         timeTr.appendChild(timeTh);
     }
     return timeTr;
@@ -203,11 +225,16 @@ function getTableFooter(hourlyTotals){
     let totalRTh = document.createElement('th');
     totalRTh.innerText = "Totals";
     tFooter.appendChild(totalRTh);
-    for (let k = 0; k < hoursOfOp.length; k++) {
+    let grandTotal = 0;
+    for (let k = 0; k < storeCollection.hoursOfOp.length; k++) {
         let td = document.createElement('td');
+        grandTotal += hourlyTotals[k];
         td.innerText = hourlyTotals[k];
         tFooter.appendChild(td);
     }
+    let grandTd = document.createElement('td');
+    grandTd.innerText = grandTotal;
+    tFooter.appendChild(grandTd);
     return tFooter;
 }
 
@@ -219,14 +246,125 @@ let tr = document.createElement('tr')
  */
 function buildLocationsSectionList(){
     let ul = document.createElement('ul');
-    for (let i = 0; i < locations.length; i++) {
+    for (let i = 0; i < storeCollection.locations.length; i++) {
         let li = document.createElement('li');
-        li.innerText = locations[i].storeLocation +" "+
-         locations[i].address + " "+hoursOfOp[0]+" to "+
-          hoursOfOp[14]+" "+locations[i].phoneNumber;
+
+        li.innerText = storeCollection.locations[i].storeLocation;
+        if(storeCollection.locations[i].address != ""){
+            li.innerText += " "+ storeCollection.locations[i].address;
+        }
+        li.innerText +=" "+storeCollection.hoursOfOp[0]+" to "+storeCollection.hoursOfOp[14];
+        if(storeCollection.locations[i].phoneNumber != ""){
+            li.innerText += " "+storeCollection.locations[i].phoneNumber;
+        }
+
         ul.appendChild(li);
     }
     return ul
+}
+
+
+function formButtonPress(){
+    clearErrorSpan();
+
+    let aStoreLocation = document.getElementById("storeLocation").value.trim();
+    let aMinCustomer = document.getElementById("minCustomer").value;
+    aMinCustomer = parseInt(aMinCustomer);
+    let aMaxCustomer = document.getElementById("maxCustomer").value;
+    aMaxCustomer = parseInt(aMaxCustomer);
+    let anAvgCookieSale = document.getElementById("avgCookieSale").value;
+    anAvgCookieSale = Number(anAvgCookieSale);
+    if(aStoreLocation != '' && aMinCustomer > 0 && aMaxCustomer > 0  && anAvgCookieSale > 0){
+        if(aMinCustomer > aMaxCustomer){
+            let temp = aMinCustomer;
+            aMinCustomer = aMaxCustomer;
+            aMaxCustomer = temp;
+        }
+        let anAddress = document.getElementById("address").value.trim();
+        let aPhoneNumber = document.getElementById("phoneNumber").value.trim();
+        if(!phoneNumberRE.test(aPhoneNumber)){
+            aPhoneNumber = "";
+        }
+        let isInList = false;
+        for (let i = 0; i < storeCollection.locations.length; i++) {
+            const element = storeCollection.locations[i];
+            if(element.storeLocation == aStoreLocation){
+                isInList = true;
+                storeCollection.UpdateLocationMember(aStoreLocation,aMinCustomer,aMaxCustomer,anAvgCookieSale,anAddress,aPhoneNumber);
+            }
+        }
+        if(!isInList){
+            storeCollection.AddMember(aStoreLocation,aMinCustomer,aMaxCustomer,anAvgCookieSale,anAddress,aPhoneNumber);
+        }
+        updateLocationListDisplay();
+        restoreForm();
+    }
+    else{
+        if(aStoreLocation == ''){
+            document.getElementById("storeLocation").value = "";
+            let span = document.getElementById("storeLocationError");
+            span.innerText = "A location is required!";
+            let br = document.createElement('br');
+            span.appendChild(br);
+        }
+        if( aMinCustomer <= 0 ){
+            document.getElementById("minCustomer").value = 0;
+            let span = document.getElementById("minCustomerError");
+            span.innerText = "A number greater than 0 is required!";
+            let br = document.createElement('br');
+            span.appendChild(br);
+        }
+        if( aMaxCustomer <= 0){
+            document.getElementById("maxCustomer").value = 0;
+            let span = document.getElementById("maxCustomerError");
+            span.innerText = "A number greater than 0 is required!";
+            let br = document.createElement('br');
+            span.appendChild(br);
+
+        }
+        if( anAvgCookieSale <= 0){
+            document.getElementById("avgCookieSale").value = 0;
+            let span = document.getElementById("avgCookieSaleError");
+            span.innerText = "A number greater than 0 is required!";
+            let br = document.createElement('br');
+            span.appendChild(br);
+
+        }
+        if(!phoneNumberRE.test(phoneNumber.value)){
+            let span = document.getElementById("phoneNumberError");
+            span.innerText = "That is not a valid phone number!";
+            let br = document.createElement('br');
+            span.appendChild(br);
+
+        }
+    }
+    
+
+}
+
+function clearErrorSpan(){
+    let span = document.getElementById("storeLocationError");
+    span.innerText = "";
+    span = document.getElementById("minCustomerError");
+    span.innerText = "";
+    span = document.getElementById("maxCustomerError");
+    span.innerText = "";
+    span = document.getElementById("avgCookieSaleError");
+    span.innerText = "";
+    span = document.getElementById("phoneNumberError");
+    span.innerText = "";
+
+}
+
+
+function restoreForm(){
+    document.getElementById("storeLocation").value = "";
+    document.getElementById("minCustomer").value = 0;
+    document.getElementById("maxCustomer").value = 0;
+    document.getElementById("avgCookieSale").value = 0;
+    document.getElementById("address").value = "";
+    document.getElementById("phoneNumber").value = "";
+    
 }
 
 initialize();
